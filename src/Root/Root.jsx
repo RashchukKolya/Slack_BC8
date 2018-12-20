@@ -9,9 +9,9 @@ class Root extends Component {
     return (
       <div>
         <Switch>
-          <Route exact path="/" component={<App />}/>
-          <Route path="/login" component={<Login />}/>
-          <Route path="/registration" component={<Register />}/>
+          <Route exact path="/" component={App}/>
+          <Route path="/login" component={Login}/>
+          <Route path="/registration" component={Register}/>
         </Switch>
       </div>
     );

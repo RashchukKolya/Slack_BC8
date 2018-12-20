@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import {NavLink} from 'react-router-dom';
 import {Grid, Form, Segment, Button, Header, Message, Icon } from 'semantic-ui-react';
-import firebase from '../firebase'
+import md5 from 'md5';
+import firebase from '../firebase';
 
 class Register extends Component {
 
@@ -11,6 +12,8 @@ class Register extends Component {
     password: '',
     passwordConfirm: '',
     errors: [],
+    loading: false,
+    userRef: firebase.database().ref('users'),
   }
 
   handlerChange = (e) => {
@@ -54,23 +57,38 @@ class Register extends Component {
     }
   }
 
+saveUser = createdUser => {
+  return this.state.userRef.child(createdUser.user.uid).set({
+    name: createdUser.user.displayName,
+    avatar: createdUser.user.photoURL,
+  })
+}
+
   handlerSubmit = (e) => {
     e.preventDefault();
     if(this.isFormValid()){
     firebase
     .auth()
     .createUserWithEmailAndPassword(this.state.email, this.state.password)
-    .then(createUser => {
-      console.log(createUser);
+    .then(createdUser => {
+      console.log(createdUser);
+      createdUser.user.updateProfile({
+        displayName: this.state.username,
+        photoURL: `http://gravatar.com/avatar/${md5(createdUser.user.email)}?d=identicon`
+      })
+      .then(() => {
+        this.saveUser(createdUser).then(() => console.log('user saved'))
+      })
     })
     .catch(err => {
       console.error(err);
       this.setState({ errors: this.state.errors.concat(err), loading: false})
-    })}
+    })
+  }
   }
 
   handlerInput = (errors, inputName) => {
-    return errors.some(el => el.message.toLowerCase().includes(inputName)) ? 'error' : ''
+    return errors.some(el => el.message.toLowerCase().includes(inputName)) ? 'error' : '';
   }
   render() {
     const {errors} =this.state;
@@ -111,7 +129,7 @@ class Register extends Component {
               placeholder='Password'
               type='password'/>
             <Form.Input fluid 
-              className={this.handlerInput(errors, 'passwordConfirm')}
+              className={this.handlerInput(errors, 'password')}
               onChange={this.handlerChange}
               name='passwordConfirm'
               icon='repeat'

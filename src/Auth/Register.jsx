@@ -40,13 +40,16 @@ class Register extends Component {
       return false;
     } else if (!this.isPasswordValid(this.state)){
       error = {
-        message: 'Password is valid'
+        message: 'Password is invalid'
       };
       this.setState({
         errors: errors.concat(error)
       })
       return false;
     } else {
+      this.setState({
+        errors: []
+      })
       return true
     }
   }
@@ -62,7 +65,12 @@ class Register extends Component {
     })
     .catch(err => {
       console.error(err);
+      this.setState({ errors: this.state.errors.concat(err), loading: false})
     })}
+  }
+
+  handlerInput = (errors, inputName) => {
+    return errors.some(el => el.message.toLowerCase().includes(inputName)) ? 'error' : ''
   }
   render() {
     const {errors} =this.state;
@@ -79,6 +87,7 @@ class Register extends Component {
         onSubmit={this.handlerSubmit}>
           <Segment>
             <Form.Input fluid 
+              className={this.handlerInput(errors, 'username')}
               onChange={this.handlerChange}
               name='username'
               icon='user'
@@ -86,6 +95,7 @@ class Register extends Component {
               placeholder='Username'
               type='text'/>
             <Form.Input fluid 
+              className={this.handlerInput(errors, 'email')}
               onChange={this.handlerChange}
               name='email'
               icon='mail'
@@ -93,6 +103,7 @@ class Register extends Component {
               placeholder='Email'
               type='email'/>
             <Form.Input fluid 
+              className={this.handlerInput(errors, 'password')}
               onChange={this.handlerChange}
               name='password'
               icon='lock'
@@ -100,6 +111,7 @@ class Register extends Component {
               placeholder='Password'
               type='password'/>
             <Form.Input fluid 
+              className={this.handlerInput(errors, 'passwordConfirm')}
               onChange={this.handlerChange}
               name='passwordConfirm'
               icon='repeat'

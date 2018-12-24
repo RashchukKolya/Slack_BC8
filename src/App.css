@@ -3,3 +3,9 @@ html, body, .app {
   padding: 1rem;
   background: #eee;
 }
+
+.message {
+  height: 380px;
+  overflow-y: scroll;
+  min-width: 100%;
+}

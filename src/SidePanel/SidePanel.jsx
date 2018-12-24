@@ -6,7 +6,6 @@ import Channels from '../Channels/Channels'
 class SidePanel extends Component {
   render() {
     return (
-      <div>
         <Menu
         size='large'
         inverted
@@ -16,7 +15,6 @@ class SidePanel extends Component {
           <UserPanel/>
           <Channels/>
         </Menu>
-      </div>
     );
   }
 }

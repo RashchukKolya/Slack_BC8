@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Segment, Input, Button } from 'semantic-ui-react';
 import firebase from '../firebase';
 import {connect} from 'react-redux'
+import FileModal from '../FileModal/FileModal';
 
 
 class MessageForm extends Component {
@@ -68,7 +69,8 @@ class MessageForm extends Component {
           value={this.state.message}/>
         <Button.Group icon widths='2'>
           <Button color='orange' content='Add Reply' labelPosition='left' icon='edit' onClick={this.sendMessage}/>
-          <Button color='teal' content='Upload media' labelPosition='right' icon='cloud upload'/>
+          <Button color='teal' content='Upload media' labelPosition='right' icon='cloud upload' onClick={this.props.showModal}/>
+          <FileModal modal={this.props.modal} closeModal={this.props.closeModal}/>
         </Button.Group>
       </Segment>
     );

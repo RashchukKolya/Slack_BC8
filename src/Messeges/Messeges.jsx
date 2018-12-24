@@ -5,6 +5,7 @@ import MessageForm from '../MessageForm/MessageForm';
 import firebase from '../firebase';
 import {connect} from 'react-redux'
 import SingleMessage from '../SingleMessage/SingleMessage';
+import FileModal from '../FileModal/FileModal';
 
 
 class Messeges extends Component {
@@ -12,6 +13,7 @@ class Messeges extends Component {
     messagesRef: firebase.database().ref('messages'),
     messages: [],
     loading: true,
+    modal: false,
   }
 
   componentDidMount() {
@@ -22,6 +24,18 @@ class Messeges extends Component {
       }
     }, 1000)
   }
+
+  closeModal = () => {
+    this.setState({
+      modal: false
+    })
+  }
+  showModal = () => {
+    this.setState({
+      modal: true
+    })
+  }
+
   addListeners = channelId => {
     let loadedMessages = [];
     this.state.messagesRef.child(channelId).on('child_added', snap => {
@@ -33,7 +47,7 @@ class Messeges extends Component {
     })
   }
   render() {
-    const {messagesRef, messages} = this.state;
+    const {messagesRef, messages, modal} = this.state;
     return (
       <React.Fragment>
         <MessageHeader/>
@@ -43,7 +57,7 @@ class Messeges extends Component {
             {messages.length > 0 && messages.map(message => <SingleMessage key={message.time} message={message} user={message.user}/>)}
           </Comment.Group>
         </Segment>
-        <MessageForm messagesRef={messagesRef}/>
+        <MessageForm messagesRef={messagesRef} showModal={this.showModal} modal={modal} closeModal={this.closeModal}/>
       </React.Fragment>
     );
   }

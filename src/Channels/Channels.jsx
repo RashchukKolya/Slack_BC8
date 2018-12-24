@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import { Menu, Icon, Modal, Form, Button } from 'semantic-ui-react';
 import firebase from '../firebase';
+import {setCurrentChannel} from '../redux/action/setCurrentChannel'
 import {connect} from 'react-redux'
 
 class Channels extends Component {
 
   state = {
+    activeChannel: '',
+    firstLoad: true,
     channels: [],
     name: '',
     descript: '',
@@ -23,10 +26,24 @@ class Channels extends Component {
       console.log(loadedChannels);
       this.setState({
         channels: loadedChannels
-      })
+      }, () => {this.loadFirstChannel()})
     })
   }
 
+  loadFirstChannel = () => {
+    if(this.state.firstLoad && this.state.channels.length>0){
+      this.props.setCurrentChannel(this.state.channels[0]);
+      this.showActiveChannel(this.state.channels[0])
+    }
+    this.setState({
+      firstLoad: false
+    })
+  }
+  showActiveChannel = channel => {
+    this.setState({
+      activeChannel: channel.id
+    })
+  }
   showModal = () => {
     this.setState({
       modal: true
@@ -94,9 +111,12 @@ class Channels extends Component {
         </Menu.Item>
         {channels.length > 0 && channels.map(channel => (
           <Menu.Item
+          onClick={(()=> {this.props.setCurrentChannel(channel)
+          this.showActiveChannel(channel)})}
           key={channel.id}
           name={channel.name}
           style={{opacity:0.7}}
+          active={channel.id === this.state.activeChannel}
           >
           # {channel.name}
           </Menu.Item>
@@ -131,4 +151,12 @@ function mapStateToProps(state){
     user: state.user.currentUser
   }
 }
-export default connect(mapStateToProps, null)(Channels);
+
+function mapDispatchToProps(dispatch) {
+  return {
+      setCurrentChannel: function (params) {
+          dispatch(setCurrentChannel(params));
+      }
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Channels);

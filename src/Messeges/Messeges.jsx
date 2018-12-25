@@ -3,7 +3,7 @@ import MessageHeader from '../MessageHeader/MessageHeader';
 import { Segment, Comment } from 'semantic-ui-react';
 import MessageForm from '../MessageForm/MessageForm';
 import firebase from '../firebase';
-import {connect} from 'react-redux'
+import {connect} from 'react-redux';
 import SingleMessage from '../SingleMessage/SingleMessage';
 import FileModal from '../FileModal/FileModal';
 

@@ -22,7 +22,7 @@ class MessageHeader extends Component {
           </Header.Subheader>
           </Header>
           <Header floated='right'>
-            <Input size='mini' icon='search' name='searchTerm' placeholder='Search'/>
+            <Input size='mini' icon='search' name='searchTerm' value={this.props.serchTerm} placeholder='Search' onChange={this.props.hendlerSearch}/>
           </Header>
       </Segment>
     );

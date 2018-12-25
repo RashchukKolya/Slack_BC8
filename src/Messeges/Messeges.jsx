@@ -14,7 +14,9 @@ class Messeges extends Component {
     messages: [],
     loading: true,
     modal: false,
-    countUser: ''
+    countUser: '',
+    serchTerm: '',
+    serchMessage: []
   }
 
   componentDidMount() {
@@ -25,7 +27,23 @@ class Messeges extends Component {
       }
     }, 1000)
   }
+  hendlerSearch = async (e) => {
+    await this.setState({
+      serchTerm: e.target.value
+    })
+    this.searchMessages()
+  }
 
+  searchMessages = () => {
+    let serchResult = this.state.messages.filter(el => {
+      if(el.content){
+        return el.content.toLowerCase().includes(this.state.serchTerm.toLowerCase())
+      }
+    });
+    this.setState({
+      serchMessage: serchResult
+    })
+  }
   countUnicUser = messages => {
     const iniqueUsers = messages.reduce((acc, el) => {
       if(!acc.includes(el.user.name)){
@@ -60,14 +78,18 @@ class Messeges extends Component {
     })
   }
   render() {
-    const {messagesRef, messages, modal, countUser} = this.state;
+    const {messagesRef, messages, modal, countUser, serchTerm, serchMessage} = this.state;
     return (
       <React.Fragment>
-        <MessageHeader countUser={countUser}/>
+        <MessageHeader countUser={countUser} hendlerSearch={this.hendlerSearch} serchTerm={serchTerm}/>
         <Segment>
           <Comment.Group
           className='message'>
-            {messages.length > 0 && messages.map(message => <SingleMessage key={message.time} message={message} user={message.user}/>)}
+            {serchMessage.length > 0 
+            
+              ? serchMessage.map(message => <SingleMessage key={message.time} message={message} user={message.user}/>) 
+              
+              :messages.length > 0 && messages.map(message => <SingleMessage key={message.time} message={message} user={message.user}/>)}
           </Comment.Group>
         </Segment>
         <MessageForm messagesRef={messagesRef} showModal={this.showModal} modal={modal} closeModal={this.closeModal}/>

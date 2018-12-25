@@ -5,7 +5,7 @@ import MessageForm from '../MessageForm/MessageForm';
 import firebase from '../firebase';
 import {connect} from 'react-redux';
 import SingleMessage from '../SingleMessage/SingleMessage';
-import FileModal from '../FileModal/FileModal';
+// import FileModal from '../FileModal/FileModal';
 
 
 class Messeges extends Component {

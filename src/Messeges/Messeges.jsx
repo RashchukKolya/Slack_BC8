@@ -84,9 +84,9 @@ class Messeges extends Component {
         <MessageHeader countUser={countUser} hendlerSearch={this.hendlerSearch} serchTerm={serchTerm}/>
         <Segment>
           <Comment.Group
-          className='message'>
+          className='message_m'>
             {serchMessage.length > 0 
-            
+
               ? serchMessage.map(message => <SingleMessage key={message.time} message={message} user={message.user}/>) 
               
               :messages.length > 0 && messages.map(message => <SingleMessage key={message.time} message={message} user={message.user}/>)}

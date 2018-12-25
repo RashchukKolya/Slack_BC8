@@ -4,7 +4,7 @@ html, body, .app {
   background: #eee;
 }
 
-.message {
+.message_m {
   height: 380px;
   overflow-y: scroll;
   min-width: 100%;

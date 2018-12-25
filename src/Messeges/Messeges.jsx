@@ -14,6 +14,7 @@ class Messeges extends Component {
     messages: [],
     loading: true,
     modal: false,
+    countUser: ''
   }
 
   componentDidMount() {
@@ -25,6 +26,17 @@ class Messeges extends Component {
     }, 1000)
   }
 
+  countUnicUser = messages => {
+    const iniqueUsers = messages.reduce((acc, el) => {
+      if(!acc.includes(el.user.name)){
+        acc.push(el.user.name)
+      }
+      return acc
+    }, [])
+    this.setState({
+      countUser: `${iniqueUsers.length} users`
+    })
+  }
   closeModal = () => {
     this.setState({
       modal: false
@@ -44,13 +56,14 @@ class Messeges extends Component {
         messages: loadedMessages,
         loading: false
       })
+      this.countUnicUser(loadedMessages)
     })
   }
   render() {
-    const {messagesRef, messages, modal} = this.state;
+    const {messagesRef, messages, modal, countUser} = this.state;
     return (
       <React.Fragment>
-        <MessageHeader/>
+        <MessageHeader countUser={countUser}/>
         <Segment>
           <Comment.Group
           className='message'>

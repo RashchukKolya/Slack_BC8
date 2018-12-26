@@ -27,6 +27,16 @@ class Messeges extends Component {
       }
     }, 1000)
   }
+
+  componentDidUpdate(prevProps){
+    if(prevProps.currentChannel && this.props.currentChannel){
+      // console.log('first');
+      if(prevProps.currentChannel.name !== this.props.currentChannel.name){
+        // console.log('second');
+        this.addListeners(this.props.currentChannel.id);
+      }
+    }
+  }
   hendlerSearch = async (e) => {
     await this.setState({
       serchTerm: e.target.value
@@ -68,14 +78,23 @@ class Messeges extends Component {
 
   addListeners = channelId => {
     let loadedMessages = [];
-    this.state.messagesRef.child(channelId).on('child_added', snap => {
-      loadedMessages.push(snap.val())
-      this.setState({
-        messages: loadedMessages,
-        loading: false
-      })
-      this.countUnicUser(loadedMessages)
+    this.state.messagesRef.child(channelId).on('value', snap => {
+      if(snap.exists()){
+        this.state.messagesRef.child(channelId).on('child_added', snap => {
+          loadedMessages.push(snap.val())
+          this.setState({
+            messages: loadedMessages,
+            loading: false
+          }, ()=> this.countUnicUser(loadedMessages))
+        })
+      } else {
+        this.setState({
+          messages: loadedMessages,
+          loading: false
+        })
+      }
     })
+    
   }
   render() {
     const {messagesRef, messages, modal, countUser, serchTerm, serchMessage} = this.state;

@@ -25,7 +25,7 @@ class MetaPanel extends Component {
     return (
       <Segment>
           <Header as='h3' attached='top'>
-            About # Channel
+            About # {this.props.channel && this.props.channel.name}
           </Header>
           <Accordion styled attached='true'>
             <Accordion.Title

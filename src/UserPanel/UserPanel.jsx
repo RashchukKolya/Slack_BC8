@@ -31,7 +31,7 @@ class UserPanel extends Component {
   render() {
     return (
       <Grid style={{
-        background: '4c3c4c'
+        background: this.props.primary
       }}>
         <Grid.Column>
           <Grid.Row 
@@ -59,6 +59,7 @@ function mapStateToProps(state){
   return {
     url: state.user.currentUser.photoURL,
     name: state.user.currentUser.displayName,
+    primary: state.color.primary
   }
 }
 
